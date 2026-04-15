@@ -1,97 +1,170 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Teatapp - React Native Finance Dashboard
 
-# Getting Started
+A React Native application for a finance dashboard, featuring commission tracking, investor management, and modern UI components.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Tools Used
 
-## Step 1: Start Metro
+### Development Tools
+- **React Native CLI**: For creating and managing the React Native project
+- **Metro**: JavaScript build tool for React Native
+- **Android Studio**: For Android development and emulator
+- **Xcode**: For iOS development and simulator
+- **Visual Studio Code**: Primary code editor
+- **Git**: Version control system
+- **GitHub**: Repository hosting and collaboration
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### AI Tools
+- **GitHub Copilot**: AI-powered code completion and suggestions during development
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+## Libraries and Packages
 
-```sh
-# Using npm
-npm start
+### Core Dependencies
+- `react`: ^19.2.3 - React library for building user interfaces
+- `react-native`: 0.84.1 - React Native framework
+- `react-native-gesture-handler`: ^2.31.0 - Gesture handling for React Native
+- `react-native-reanimated`: ^4.3.0 - Animation library
+- `react-native-safe-area-context`: ^5.7.0 - Safe area handling
+- `react-native-screens`: ^4.24.0 - Screen management
+- `react-native-vector-icons`: ^9.2.0 - Icon library
+- `react-native-linear-gradient`: ^2.8.3 - Gradient backgrounds
+- `@react-native-masked-view/masked-view`: ^0.3.2 - Masked view component
+- `@react-navigation/native`: ^7.2.2 - Navigation library
+- `@react-navigation/bottom-tabs`: ^7.15.9 - Bottom tab navigation
+- `@react-navigation/native-stack`: ^7.14.10 - Stack navigation
+- `axios`: ^1.14.0 - HTTP client for API calls
 
-# OR using Yarn
-yarn start
+### Development Dependencies
+- `@babel/core`: ^7.25.2 - Babel core
+- `@babel/preset-env`: ^7.25.3 - Babel preset for environments
+- `@babel/runtime`: ^7.25.0 - Babel runtime
+- `@react-native-community/cli`: 20.1.0 - React Native CLI
+- `@react-native-community/cli-platform-android`: 20.1.0 - Android CLI platform
+- `@react-native-community/cli-platform-ios`: 20.1.0 - iOS CLI platform
+- `@react-native/babel-preset`: 0.84.1 - React Native Babel preset
+- `@react-native/eslint-config`: 0.84.1 - ESLint config for React Native
+- `@react-native/metro-config`: 0.84.1 - Metro config for React Native
+- `@react-native/typescript-config`: 0.84.1 - TypeScript config for React Native
+- `@types/jest`: ^29.5.13 - TypeScript types for Jest
+- `@types/react`: ^19.2.0 - TypeScript types for React
+- `@types/react-test-renderer`: ^19.1.0 - TypeScript types for React Test Renderer
+- `eslint`: ^8.19.0 - Linting tool
+- `jest`: ^29.6.3 - Testing framework
+- `prettier`: 2.8.8 - Code formatter
+- `react-test-renderer`: 19.2.3 - React test renderer
+- `typescript`: ^5.8.3 - TypeScript compiler
+
+## Setup and Installation Instructions
+
+### Prerequisites
+- Node.js >= 22.11.0
+- npm or yarn package manager
+- Android Studio (for Android development)
+- Xcode (for iOS development, macOS only)
+- Git
+
+### Installation Steps
+
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/Shivam55-bit/Figmaapp.git
+   cd Teatapp
+   ```
+
+2. **Install dependencies:**
+   ```sh
+   npm install
+   # OR
+   yarn install
+   ```
+
+3. **iOS Setup (macOS only):**
+   - Install CocoaPods:
+     ```sh
+     bundle install
+     bundle exec pod install
+     ```
+
+4. **Android Setup:**
+   - Ensure Android SDK is installed via Android Studio
+   - Set up environment variables for Android SDK
+
+### Running the Application
+
+1. **Start Metro bundler:**
+   ```sh
+   npm start
+   # OR
+   yarn start
+   ```
+
+2. **Run on Android:**
+   ```sh
+   npm run android
+   # OR
+   yarn android
+   ```
+
+3. **Run on iOS (macOS only):**
+   ```sh
+   npm run ios
+   # OR
+   yarn ios
+   ```
+
+### Development Commands
+- `npm run lint` - Run ESLint for code linting
+- `npm test` - Run Jest tests
+
+## Assumptions and Decisions Made During Development
+
+### Technical Decisions
+- **TypeScript**: Used for type safety and better developer experience
+- **React Navigation**: Chosen for navigation due to its flexibility and community support
+- **Linear Gradient**: Used for modern UI effects in cards and buttons
+- **Vector Icons**: Material Community Icons for consistent iconography
+- **Reanimated**: For smooth animations and performance
+
+### Design Decisions
+- **Dark Theme**: Primary color scheme with dark backgrounds for modern finance app feel
+- **Card-based Layout**: Modular components for better maintainability
+- **Gradient Accents**: Yellow-gold gradients for highlights and CTAs
+- **Responsive Design**: Using moderateScale for device-independent scaling
+
+### Architecture Decisions
+- **Component-based Structure**: Organized components, screens, and navigation
+- **Theme System**: Centralized colors, spacing, and typography
+- **Modular Navigation**: Bottom tabs with stack navigation for complex flows
+
+### Development Assumptions
+- Target platforms: Android and iOS
+- Minimum React Native version: 0.84.1
+- Node.js version: >= 22.11.0
+- Development environment: VS Code with GitHub Copilot
+- API integration: Axios for HTTP requests (assumed backend exists)
+
+## Project Structure
+
+```
+Teatapp/
+├── android/          # Android native code
+├── ios/             # iOS native code
+├── src/
+│   ├── components/  # Reusable UI components
+│   ├── navigation/  # Navigation configuration
+│   ├── screens/     # Screen components
+│   └── theme/       # Theme and styling
+├── __tests__/       # Test files
+└── package.json     # Dependencies and scripts
 ```
 
-## Step 2: Build and run your app
+## Contributing
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
 
-### Android
+## License
 
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
-```
-
-### iOS
-
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
-```
-
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
-
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
-
-## Step 3: Modify your app
-
-Now that you have successfully run the app, let's make changes!
-
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
-
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
-
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+This project is private and proprietary.
