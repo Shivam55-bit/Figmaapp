@@ -15,6 +15,7 @@ A React Native application for a finance dashboard, featuring commission trackin
 
 ### AI Tools
 - **GitHub Copilot**: AI-powered code completion and suggestions during development
+- **Locofy.ai**: Used to convert Figma designs to React Native code components
 
 ## Libraries and Packages
 
