@@ -14,6 +14,19 @@ import { Colors, Spacing, BorderRadius, FontSize, moderateScale } from '../theme
 import { Card, SectionHeader } from '../components';
 
 const InvestorDetailScreen = ({ navigation, route }: any) => {
+  const investor = route?.params?.investor;
+  const name = investor?.name ?? 'Priya Sharma';
+  const initials = name
+    .split(' ')
+    .map((w: string) => w[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+  const joinedDate = investor?.joinedDate ?? '15 Mar 2026';
+  const invested = investor?.invested ?? '10,000';
+  const current = investor?.current ?? '$11,800';
+  const returnPercent = investor?.returnPercent ?? '+18%';
+
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.background} />
@@ -24,10 +37,16 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
         {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-            <Icon name="chevron-left" size={moderateScale(28)} color={Colors.accent} />
+            <LinearGradient colors={['#1E1E2E', '#12121A']} style={styles.backBtnBg}>
+              <Icon name="chevron-left" size={moderateScale(22)} color={Colors.accent} />
+            </LinearGradient>
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>Investors Detail</Text>
-          <View style={styles.headerRight} />
+          <Text style={styles.headerTitle}>Investor Detail</Text>
+          <TouchableOpacity style={styles.moreBtn}>
+            <LinearGradient colors={['#1E1E2E', '#12121A']} style={styles.backBtnBg}>
+              <Icon name="dots-vertical" size={moderateScale(20)} color={Colors.textSecondary} />
+            </LinearGradient>
+          </TouchableOpacity>
         </View>
 
         {/* Investor Info */}
@@ -39,31 +58,50 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
               end={{x: 1, y: 1}}
               style={styles.investorAvatarRing}>
               <View style={styles.investorAvatarInner}>
-                <Text style={styles.investorAvatarText}>PS</Text>
+                <Text style={styles.investorAvatarText}>{initials}</Text>
               </View>
             </LinearGradient>
             <View style={styles.investorNameCol}>
               <View style={styles.investorNameRow}>
-                <Text style={styles.investorName}>Priya Sharma</Text>
+                <Text style={styles.investorName}>{name}</Text>
                 <View style={styles.kycBadge}>
                   <Icon name="check-circle" size={moderateScale(12)} color={Colors.green} />
                   <Text style={styles.kycBadgeText}>KYC Verified</Text>
                 </View>
               </View>
-              <Text style={styles.joinedDate}>Joined 15 Mar 2026</Text>
+              <View style={styles.joinedRow}>
+                <Icon name="calendar-clock" size={moderateScale(12)} color={Colors.textMuted} />
+                <Text style={styles.joinedDate}>Joined {joinedDate}</Text>
+              </View>
             </View>
           </View>
         </View>
 
         {/* Action Buttons */}
         <View style={styles.actionButtonsRow}>
-          <TouchableOpacity style={[styles.actionBtn, styles.actionBtnCall]} activeOpacity={0.7}>
-            <Icon name="phone-outline" size={moderateScale(18)} color={Colors.green} />
-            <Text style={styles.actionBtnText}>Call Investor</Text>
+          <TouchableOpacity style={styles.actionBtn} activeOpacity={0.7}>
+            <LinearGradient colors={['#0D3B1E', '#12121A']} style={styles.actionBtnInner}>
+              <View style={styles.actionIconBg}>
+                <Icon name="phone-outline" size={moderateScale(16)} color={Colors.green} />
+              </View>
+              <Text style={styles.actionBtnText}>Call</Text>
+            </LinearGradient>
           </TouchableOpacity>
-          <TouchableOpacity style={[styles.actionBtn, styles.actionBtnMsg]} activeOpacity={0.7}>
-            <Icon name="message-outline" size={moderateScale(18)} color={Colors.accent} />
-            <Text style={styles.actionBtnTextAlt}>Message</Text>
+          <TouchableOpacity style={styles.actionBtn} activeOpacity={0.7}>
+            <LinearGradient colors={['#2A2008', '#12121A']} style={styles.actionBtnInner}>
+              <View style={[styles.actionIconBg, { backgroundColor: '#F5B70015' }]}>
+                <Icon name="message-outline" size={moderateScale(16)} color={Colors.accent} />
+              </View>
+              <Text style={styles.actionBtnTextAlt}>Message</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.actionBtn} activeOpacity={0.7}>
+            <LinearGradient colors={['#1A1A2E', '#12121A']} style={styles.actionBtnInner}>
+              <View style={[styles.actionIconBg, { backgroundColor: '#7C4DFF15' }]}>
+                <Icon name="share-variant-outline" size={moderateScale(16)} color="#B388FF" />
+              </View>
+              <Text style={[styles.actionBtnTextAlt, { color: '#B388FF' }]}>Share</Text>
+            </LinearGradient>
           </TouchableOpacity>
         </View>
 
@@ -71,20 +109,20 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
         <Card>
           <View style={styles.summaryRow}>
             <View style={styles.summaryCol}>
-              <Text style={styles.summaryValue}>$10,000</Text>
               <Text style={styles.summaryLabel}>TOTAL INVESTED</Text>
+              <Text style={styles.summaryValue}>${invested}</Text>
             </View>
-            <View style={styles.summaryCol}>
-              <Text style={[styles.summaryValue, { color: Colors.green }]}>$11,800</Text>
+            <View style={styles.summaryDivider} />
+            <View style={[styles.summaryCol, { alignItems: 'flex-end' }]}>
               <Text style={styles.summaryLabel}>CURRENT VALUE</Text>
+              <Text style={[styles.summaryValue, { color: Colors.green }]}>{current}</Text>
             </View>
           </View>
           <View style={styles.returnRow}>
-            <Text style={styles.returnLabel}>Total Returns</Text>
-            <View style={styles.returnValueRow}>
-              <Icon name="trending-up" size={moderateScale(16)} color={Colors.green} />
-              <Text style={styles.returnValue}> +$1,800 (+18%)</Text>
-            </View>
+            <LinearGradient colors={['#0D3B1E', '#12121A']} start={{x: 0, y: 0}} end={{x: 1, y: 0}} style={styles.returnBadge}>
+              <Icon name="trending-up" size={moderateScale(14)} color={Colors.green} />
+              <Text style={styles.returnValue}>{returnPercent} Returns</Text>
+            </LinearGradient>
           </View>
           <View style={styles.divider} />
           <View style={styles.summaryRow}>
@@ -92,7 +130,7 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
               <Text style={styles.summarySmallLabel}>WALLET BALANCE</Text>
               <Text style={styles.summarySmallValue}>$1,250.00 USDT</Text>
             </View>
-            <View style={styles.summaryCol}>
+            <View style={[styles.summaryCol, { alignItems: 'flex-end' }]}>
               <Text style={styles.summarySmallLabel}>ACTIVE INVESTMENTS</Text>
               <Text style={styles.summarySmallValue}>2</Text>
             </View>
@@ -102,8 +140,10 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
         {/* Commission Card */}
         <Card style={styles.commissionCard}>
           <View style={styles.commissionTitleRow}>
-            <Icon name="cash-multiple" size={moderateScale(16)} color={Colors.accent} />
-            <Text style={styles.commissionTitle}>Your Commission (This Investor)</Text>
+            <View style={styles.commissionIconBg}>
+              <Icon name="cash-multiple" size={moderateScale(14)} color={Colors.accent} />
+            </View>
+            <Text style={styles.commissionTitle}>Your Commission</Text>
           </View>
           <View style={styles.commissionGrid}>
             <View style={[styles.commissionGridItem, styles.commissionGridItemBorder]}>
@@ -151,9 +191,9 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
         <Card>
           <View style={styles.investmentHeader}>
             <View style={styles.investmentLeft}>
-              <View style={[styles.investmentIcon, { backgroundColor: '#1A3A1A' }]}>
+              <LinearGradient colors={['#0D3B1E', '#12121A']} style={styles.investmentIcon}>
                 <Icon name="basket-outline" size={moderateScale(18)} color={Colors.green} />
-              </View>
+              </LinearGradient>
               <View>
                 <Text style={styles.investmentName}>Basket Alpha</Text>
                 <Text style={styles.investmentSub}>Premium Gold Investment</Text>
@@ -164,18 +204,16 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
             </View>
           </View>
           <View style={styles.investmentStatsRow}>
-            <View style={styles.investmentStatCol}>
-              <Text style={styles.investmentStatLabel}>INVESTED</Text>
-              <Text style={styles.investmentStatValue}>$7,000</Text>
-            </View>
-            <View style={styles.investmentStatCol}>
-              <Text style={styles.investmentStatLabel}>CURRENT</Text>
-              <Text style={[styles.investmentStatValue, { color: Colors.green }]}>$8,260</Text>
-            </View>
-            <View style={styles.investmentStatCol}>
-              <Text style={styles.investmentStatLabel}>MATURITY</Text>
-              <Text style={styles.investmentStatValue}>9 mo</Text>
-            </View>
+            {[
+              { label: 'INVESTED', value: '$7,000' },
+              { label: 'CURRENT', value: '$8,260', color: Colors.green },
+              { label: 'MATURITY', value: '9 mo' },
+            ].map((s, i) => (
+              <View key={i} style={styles.investmentStatCol}>
+                <Text style={styles.investmentStatLabel}>{s.label}</Text>
+                <Text style={[styles.investmentStatValue, s.color ? { color: s.color } : {}]}>{s.value}</Text>
+              </View>
+            ))}
           </View>
         </Card>
 
@@ -183,9 +221,9 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
         <Card>
           <View style={styles.investmentHeader}>
             <View style={styles.investmentLeft}>
-              <View style={[styles.investmentIcon, { backgroundColor: '#1A2A3A' }]}>
+              <LinearGradient colors={['#1A2A3A', '#12121A']} style={styles.investmentIcon}>
                 <Icon name="basket-outline" size={moderateScale(18)} color={Colors.sipBadgeText} />
-              </View>
+              </LinearGradient>
               <View>
                 <Text style={styles.investmentName}>Basket Alpha</Text>
                 <Text style={styles.investmentSub}>Systematic Investment Plan</Text>
@@ -196,30 +234,29 @@ const InvestorDetailScreen = ({ navigation, route }: any) => {
             </View>
           </View>
           <View style={styles.investmentStatsRow}>
-            <View style={styles.investmentStatCol}>
-              <Text style={styles.investmentStatLabel}>MONTHLY</Text>
-              <Text style={styles.investmentStatValue}>$500</Text>
-            </View>
-            <View style={styles.investmentStatCol}>
-              <Text style={styles.investmentStatLabel}>TOTAL IN</Text>
-              <Text style={styles.investmentStatValue}>$500</Text>
-            </View>
-            <View style={styles.investmentStatCol}>
-              <Text style={styles.investmentStatLabel}>MATURITY</Text>
-              <Text style={styles.investmentStatValue}>11 mo</Text>
-            </View>
+            {[
+              { label: 'MONTHLY', value: '$500' },
+              { label: 'TOTAL IN', value: '$500' },
+              { label: 'MATURITY', value: '11 mo' },
+            ].map((s, i) => (
+              <View key={i} style={styles.investmentStatCol}>
+                <Text style={styles.investmentStatLabel}>{s.label}</Text>
+                <Text style={styles.investmentStatValue}>{s.value}</Text>
+              </View>
+            ))}
           </View>
         </Card>
 
         {/* Download Button */}
-        <TouchableOpacity activeOpacity={0.8}>
+        <TouchableOpacity activeOpacity={0.8} style={styles.downloadBtnShadow}>
           <LinearGradient
             colors={['#FF5252', '#D32F2F']}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             style={styles.downloadBtn}>
-            <Icon name="download" size={moderateScale(18)} color={Colors.white} />
+            <Icon name="file-download-outline" size={moderateScale(18)} color={Colors.white} />
             <Text style={styles.downloadBtnText}>Download Portfolio Summary</Text>
+            <Icon name="chevron-right" size={moderateScale(16)} color={Colors.white} />
           </LinearGradient>
         </TouchableOpacity>
 
@@ -247,19 +284,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginBottom: Spacing.lg,
   },
-  backBtn: {
-    width: moderateScale(36),
-    height: moderateScale(36),
+  backBtn: {},
+  moreBtn: {},
+  backBtnBg: {
+    width: moderateScale(38),
+    height: moderateScale(38),
+    borderRadius: moderateScale(12),
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
   },
   headerTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.xl,
     fontWeight: '700',
-  },
-  headerRight: {
-    width: moderateScale(36),
   },
   // Investor Info
   investorInfo: {
@@ -270,18 +309,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   investorAvatarRing: {
-    width: moderateScale(56),
-    height: moderateScale(56),
-    borderRadius: moderateScale(28),
+    width: moderateScale(60),
+    height: moderateScale(60),
+    borderRadius: moderateScale(30),
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Spacing.md,
   },
   investorAvatarInner: {
-    width: moderateScale(50),
-    height: moderateScale(50),
-    borderRadius: moderateScale(25),
-    backgroundColor: '#1A1A1A',
+    width: moderateScale(54),
+    height: moderateScale(54),
+    borderRadius: moderateScale(27),
+    backgroundColor: '#0A0A14',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -318,47 +357,50 @@ const styles = StyleSheet.create({
     fontSize: FontSize.xs,
     fontWeight: '700',
   },
+  joinedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 4,
+  },
   joinedDate: {
     color: Colors.textMuted,
     fontSize: FontSize.sm,
-    marginTop: 4,
   },
   // Action Buttons
   actionButtonsRow: {
     flexDirection: 'row',
-    gap: Spacing.md,
+    gap: Spacing.sm,
     marginBottom: Spacing.xl,
   },
   actionBtn: {
     flex: 1,
-    flexDirection: 'row',
+  },
+  actionBtnInner: {
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.lg,
     borderWidth: 1,
-    backgroundColor: Colors.cardBg,
-    gap: Spacing.sm,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    borderColor: Colors.cardBorder,
+    gap: 4,
   },
-  actionBtnCall: {
-    borderColor: '#0D3B1E',
-  },
-  actionBtnMsg: {
-    borderColor: '#3D3000',
+  actionIconBg: {
+    width: moderateScale(30),
+    height: moderateScale(30),
+    borderRadius: moderateScale(10),
+    backgroundColor: '#00E67615',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   actionBtnText: {
     color: Colors.green,
-    fontSize: FontSize.md,
+    fontSize: FontSize.sm,
     fontWeight: '600',
   },
   actionBtnTextAlt: {
     color: Colors.accent,
-    fontSize: FontSize.md,
+    fontSize: FontSize.sm,
     fontWeight: '600',
   },
   // Summary
@@ -370,6 +412,12 @@ const styles = StyleSheet.create({
   summaryCol: {
     flex: 1,
   },
+  summaryDivider: {
+    width: 1,
+    height: moderateScale(40),
+    backgroundColor: Colors.divider,
+    marginHorizontal: Spacing.md,
+  },
   summaryValue: {
     color: Colors.textPrimary,
     fontSize: FontSize.xxl,
@@ -378,26 +426,27 @@ const styles = StyleSheet.create({
   summaryLabel: {
     color: Colors.textMuted,
     fontSize: FontSize.xs,
-    fontWeight: '500',
-    marginTop: 2,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+    marginBottom: 4,
   },
   returnRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
     marginBottom: Spacing.md,
   },
-  returnLabel: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.md,
-  },
-  returnValueRow: {
+  returnBadge: {
     flexDirection: 'row',
+    alignSelf: 'flex-start',
     alignItems: 'center',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.round,
+    gap: 6,
+    borderWidth: 1,
+    borderColor: '#0D3B1E',
   },
   returnValue: {
     color: Colors.green,
-    fontSize: FontSize.md,
+    fontSize: FontSize.sm,
     fontWeight: '700',
   },
   divider: {
@@ -422,8 +471,16 @@ const styles = StyleSheet.create({
   commissionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: Spacing.sm,
     marginBottom: Spacing.lg,
+  },
+  commissionIconBg: {
+    width: moderateScale(28),
+    height: moderateScale(28),
+    borderRadius: moderateScale(9),
+    backgroundColor: '#F5B70015',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   commissionTitle: {
     color: Colors.accent,
@@ -455,7 +512,7 @@ const styles = StyleSheet.create({
   },
   // Projected
   projectedCard: {
-    borderColor: '#3D3000',
+    borderColor: '#3D300030',
     borderWidth: 1,
   },
   projectedTitleRow: {
@@ -509,9 +566,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   investmentIcon: {
-    width: moderateScale(38),
-    height: moderateScale(38),
-    borderRadius: moderateScale(12),
+    width: moderateScale(40),
+    height: moderateScale(40),
+    borderRadius: moderateScale(13),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -529,7 +586,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.lumpSumBadgeBg,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
+    borderRadius: BorderRadius.round,
     borderWidth: 1,
     borderColor: Colors.green,
   },
@@ -543,7 +600,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.sipBadgeBg,
     paddingHorizontal: Spacing.md,
     paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
+    borderRadius: BorderRadius.round,
     borderWidth: 1,
     borderColor: Colors.sipBadgeText,
   },
@@ -555,6 +612,9 @@ const styles = StyleSheet.create({
   investmentStatsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    backgroundColor: '#0A0A14',
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
   },
   investmentStatCol: {
     flex: 1,
@@ -570,14 +630,21 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   // Download
+  downloadBtnShadow: {
+    elevation: 6,
+    shadowColor: '#FF5252',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    marginTop: Spacing.sm,
+  },
   downloadBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: BorderRadius.md,
+    borderRadius: BorderRadius.xl,
     paddingVertical: Spacing.lg,
     gap: Spacing.sm,
-    marginTop: Spacing.sm,
   },
   downloadBtnText: {
     color: Colors.white,
@@ -585,7 +652,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   bottomSpacer: {
-    height: Spacing.lg,
+    height: Spacing.xxl,
   },
 });
 

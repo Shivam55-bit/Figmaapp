@@ -75,17 +75,17 @@ const BottomTabNavigator = () => {
 
 const styles = StyleSheet.create({
   tabBar: {
-    backgroundColor: '#0F0F0F',
+    backgroundColor: '#0A0A0F',
     borderTopWidth: 1,
-    borderTopColor: '#1A1A1A',
+    borderTopColor: '#1A1A28',
     paddingTop: moderateScale(6),
     paddingBottom: moderateScale(8),
-    height: moderateScale(68),
-    elevation: 8,
+    height: moderateScale(70),
+    elevation: 12,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: -6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
   },
   tabBarItem: {
     paddingTop: moderateScale(2),
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
   activeIndicator: {
     position: 'absolute',
     top: -moderateScale(8),
-    width: moderateScale(20),
+    width: moderateScale(24),
     height: moderateScale(3),
     borderRadius: 2,
     backgroundColor: Colors.accent,

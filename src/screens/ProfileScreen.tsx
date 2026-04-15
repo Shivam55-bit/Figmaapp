@@ -94,12 +94,16 @@ const ProfileScreen = ({navigation}: any) => {
         <View style={styles.header}>
           <Text style={styles.headerTitle}>Profile</Text>
           <TouchableOpacity style={styles.settingsBtn}>
-            <Icon name="cog-outline" size={moderateScale(22)} color={Colors.accent} />
+            <LinearGradient colors={['#1E1E2E', '#12121A']} style={styles.settingsBtnBg}>
+              <Icon name="cog-outline" size={moderateScale(20)} color={Colors.accent} />
+            </LinearGradient>
           </TouchableOpacity>
         </View>
 
         {/* Profile Card */}
         <Card gradient style={styles.profileCard}>
+          <View style={styles.decorCircle1} />
+          <View style={styles.decorCircle2} />
           <LinearGradient
             colors={['#F5B700', '#FFD54F', '#F5B700']}
             start={{x: 0, y: 0}}
@@ -111,41 +115,43 @@ const ProfileScreen = ({navigation}: any) => {
           </LinearGradient>
           <Text style={styles.profileName}>Rahul Kapoor</Text>
           <Text style={styles.profileUsername}>@rahul_kapoor</Text>
-          <Text style={styles.memberSince}>Member since Mar 2024</Text>
+
           <View style={styles.profileBadge}>
             <Icon name="check-decagram" size={moderateScale(14)} color={Colors.accent} />
             <Text style={styles.profileBadgeText}>Verified Partner</Text>
           </View>
 
+          <View style={styles.memberSinceRow}>
+            <Icon name="calendar-clock" size={moderateScale(12)} color={Colors.textMuted} />
+            <Text style={styles.memberSince}>Member since Mar 2024</Text>
+          </View>
+
           <View style={styles.profileStatsRow}>
-            <View style={styles.profileStatItem}>
-              <Icon name="account-group-outline" size={moderateScale(16)} color={Colors.accent} />
-              <Text style={styles.profileStatValue}>12</Text>
-              <Text style={styles.profileStatLabel}>Investors</Text>
-            </View>
-            <View style={styles.profileStatDivider} />
-            <View style={styles.profileStatItem}>
-              <Icon name="chart-box-outline" size={moderateScale(16)} color={Colors.green} />
-              <Text style={styles.profileStatValue}>$48.2K</Text>
-              <Text style={styles.profileStatLabel}>Total AUM</Text>
-            </View>
-            <View style={styles.profileStatDivider} />
-            <View style={styles.profileStatItem}>
-              <Icon name="trending-up" size={moderateScale(16)} color={Colors.green} />
-              <Text style={[styles.profileStatValue, {color: Colors.green}]}>
-                +18%
-              </Text>
-              <Text style={styles.profileStatLabel}>Returns</Text>
-            </View>
+            {[
+              { icon: 'account-group-outline', value: '12', label: 'Investors', color: Colors.accent },
+              { icon: 'chart-box-outline', value: '$48.2K', label: 'Total AUM', color: Colors.green },
+              { icon: 'trending-up', value: '+18%', label: 'Returns', color: Colors.green },
+            ].map((stat, idx) => (
+              <React.Fragment key={idx}>
+                {idx > 0 && <View style={styles.profileStatDivider} />}
+                <View style={styles.profileStatItem}>
+                  <View style={[styles.profileStatIconBg, { backgroundColor: `${stat.color}15` }]}>
+                    <Icon name={stat.icon} size={moderateScale(14)} color={stat.color} />
+                  </View>
+                  <Text style={[styles.profileStatValue, { color: stat.color }]}>{stat.value}</Text>
+                  <Text style={styles.profileStatLabel}>{stat.label}</Text>
+                </View>
+              </React.Fragment>
+            ))}
           </View>
         </Card>
 
         {/* Referral Card */}
         <Card style={styles.referralCard}>
           <View style={styles.referralLeft}>
-            <View style={styles.referralIconContainer}>
-              <Icon name="gift-outline" size={moderateScale(22)} color={Colors.accent} />
-            </View>
+            <LinearGradient colors={['#2A2008', '#12121A']} style={styles.referralIconContainer}>
+              <Icon name="gift-outline" size={moderateScale(20)} color={Colors.accent} />
+            </LinearGradient>
             <View style={styles.referralTextContainer}>
               <Text style={styles.referralTitle}>Refer & Earn</Text>
               <Text style={styles.referralSub}>
@@ -153,7 +159,7 @@ const ProfileScreen = ({navigation}: any) => {
               </Text>
             </View>
           </View>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity activeOpacity={0.8} style={styles.referralBtnShadow}>
             <LinearGradient
               colors={['#F5B700', '#FFD54F']}
               start={{x: 0, y: 0}}
@@ -179,7 +185,7 @@ const ProfileScreen = ({navigation}: any) => {
         {/* Logout */}
         <TouchableOpacity style={styles.logoutBtn} activeOpacity={0.7}>
           <LinearGradient
-            colors={['#3B1A1A', '#1A1A1A']}
+            colors={['#3B1A1A', '#12121A']}
             start={{x: 0, y: 0}}
             end={{x: 1, y: 0}}
             style={styles.logoutGradient}>
@@ -219,39 +225,53 @@ const styles = StyleSheet.create({
     fontSize: FontSize.xxl,
     fontWeight: '700',
   },
-  settingsBtn: {
-    width: moderateScale(40),
-    height: moderateScale(40),
-    borderRadius: moderateScale(20),
-    backgroundColor: Colors.cardBg,
-    borderWidth: 1,
-    borderColor: Colors.cardBorder,
+  settingsBtn: {},
+  settingsBtnBg: {
+    width: moderateScale(38),
+    height: moderateScale(38),
+    borderRadius: moderateScale(12),
     justifyContent: 'center',
     alignItems: 'center',
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
   },
   // Profile Card
   profileCard: {
     alignItems: 'center',
     paddingVertical: Spacing.xxl,
+    overflow: 'hidden',
+  },
+  decorCircle1: {
+    position: 'absolute',
+    top: -moderateScale(25),
+    right: -moderateScale(25),
+    width: moderateScale(90),
+    height: moderateScale(90),
+    borderRadius: moderateScale(45),
+    backgroundColor: '#F5B70008',
+  },
+  decorCircle2: {
+    position: 'absolute',
+    bottom: -moderateScale(15),
+    left: -moderateScale(15),
+    width: moderateScale(60),
+    height: moderateScale(60),
+    borderRadius: moderateScale(30),
+    backgroundColor: '#7C4DFF08',
   },
   avatarRing: {
-    width: moderateScale(84),
-    height: moderateScale(84),
-    borderRadius: moderateScale(42),
+    width: moderateScale(88),
+    height: moderateScale(88),
+    borderRadius: moderateScale(44),
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: Spacing.md,
   },
   avatarInner: {
-    width: moderateScale(76),
-    height: moderateScale(76),
-    borderRadius: moderateScale(38),
-    backgroundColor: '#1A1A1A',
+    width: moderateScale(80),
+    height: moderateScale(80),
+    borderRadius: moderateScale(40),
+    backgroundColor: '#0A0A14',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -270,12 +290,6 @@ const styles = StyleSheet.create({
     fontSize: FontSize.sm,
     marginTop: 2,
   },
-  memberSince: {
-    color: Colors.textMuted,
-    fontSize: FontSize.xs,
-    marginTop: 4,
-    fontStyle: 'italic',
-  },
   profileBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -290,6 +304,17 @@ const styles = StyleSheet.create({
     color: Colors.accent,
     fontSize: FontSize.xs,
     fontWeight: '600',
+  },
+  memberSinceRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: Spacing.sm,
+  },
+  memberSince: {
+    color: Colors.textMuted,
+    fontSize: FontSize.xs,
+    fontStyle: 'italic',
   },
   profileStatsRow: {
     flexDirection: 'row',
@@ -306,6 +331,14 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 2,
   },
+  profileStatIconBg: {
+    width: moderateScale(28),
+    height: moderateScale(28),
+    borderRadius: moderateScale(9),
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 2,
+  },
   profileStatValue: {
     color: Colors.textPrimary,
     fontSize: FontSize.xl,
@@ -315,11 +348,11 @@ const styles = StyleSheet.create({
     color: Colors.textMuted,
     fontSize: FontSize.xs,
     fontWeight: '500',
-    marginTop: 4,
+    marginTop: 2,
   },
   profileStatDivider: {
     width: 1,
-    height: moderateScale(36),
+    height: moderateScale(40),
     backgroundColor: Colors.divider,
   },
   // Referral Card
@@ -327,7 +360,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    borderColor: '#3D3000',
+    borderColor: '#3D300030',
     borderWidth: 1,
   },
   referralLeft: {
@@ -339,10 +372,11 @@ const styles = StyleSheet.create({
   referralIconContainer: {
     width: moderateScale(42),
     height: moderateScale(42),
-    borderRadius: moderateScale(21),
-    backgroundColor: '#2A2000',
+    borderRadius: moderateScale(14),
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
   },
   referralTextContainer: {
     flex: 1,
@@ -357,9 +391,16 @@ const styles = StyleSheet.create({
     fontSize: FontSize.xs,
     marginTop: 2,
   },
+  referralBtnShadow: {
+    elevation: 4,
+    shadowColor: '#F5B700',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
   referralBtn: {
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.sm + 2,
     borderRadius: BorderRadius.round,
   },
   referralBtnText: {
@@ -399,7 +440,7 @@ const styles = StyleSheet.create({
     width: moderateScale(36),
     height: moderateScale(36),
     borderRadius: moderateScale(12),
-    backgroundColor: '#1E1E1E',
+    backgroundColor: '#1A1A28',
     borderWidth: 1,
     borderColor: Colors.cardBorder,
     justifyContent: 'center',
@@ -431,11 +472,16 @@ const styles = StyleSheet.create({
   },
   // Logout
   logoutBtn: {
-    marginTop: Spacing.sm,
-    borderRadius: BorderRadius.lg,
+    marginTop: Spacing.lg,
+    borderRadius: BorderRadius.xl,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: '#3B1A1A',
+    elevation: 4,
+    shadowColor: '#FF5252',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
   },
   logoutGradient: {
     flexDirection: 'row',
@@ -456,7 +502,7 @@ const styles = StyleSheet.create({
     marginTop: Spacing.lg,
   },
   bottomSpacer: {
-    height: Spacing.lg,
+    height: Spacing.xxl,
   },
 });
 

@@ -4,22 +4,27 @@ import LinearGradient from 'react-native-linear-gradient';
 import { Colors, BorderRadius, Spacing, FontSize } from '../theme';
 
 interface ProgressBarProps {
-  progress: number; // 0-1
+  progress: number; // 0 - 1
   label?: string;
   subLabel?: string;
   height?: number;
   showChips?: boolean;
   chips?: { label: string; active?: boolean }[];
+  color?: string;
 }
 
 const ProgressBar: React.FC<ProgressBarProps> = ({
   progress,
   label,
   subLabel,
-  height = 8,
+  height = 10,
   showChips,
   chips,
+  color,
 }) => {
+  const clampedProgress = Math.min(Math.max(progress, 0), 1);
+  const progressPercent = clampedProgress * 100;
+
   return (
     <View style={styles.container}>
       {label && (
@@ -28,14 +33,39 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           {subLabel && <Text style={styles.subLabel}>{subLabel}</Text>}
         </View>
       )}
+
       <View style={[styles.track, { height }]}>
+        {/* Progress Fill */}
         <LinearGradient
-          colors={['#F5B700', '#FFD54F', '#F5B700']}
+          colors={
+            color
+              ? [color, color]
+              : ['#F5B700', '#FFD54F', '#FFA000']
+          }
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
-          style={[styles.fill, { width: `${Math.min(progress * 100, 100)}%`, height }]}
+          style={[
+            styles.fill,
+            {
+              width: `${progressPercent}%`,
+              height,
+            },
+          ]}
+        />
+
+        {/* Tip Glow (fixed position) */}
+        <View
+          style={[
+            styles.tipGlow,
+            {
+              left: `${progressPercent}%`,
+              transform: [{ translateX: -6 }], // center align
+              backgroundColor: color || '#F5B700',
+            },
+          ]}
         />
       </View>
+
       {showChips && chips && (
         <View style={styles.chipsRow}>
           {chips.map((chip, index) => (
@@ -44,12 +74,16 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
               style={[
                 styles.chip,
                 chip.active ? styles.chipActive : styles.chipInactive,
-              ]}>
+              ]}
+            >
               <Text
                 style={[
                   styles.chipText,
-                  chip.active ? styles.chipTextActive : styles.chipTextInactive,
-                ]}>
+                  chip.active
+                    ? styles.chipTextActive
+                    : styles.chipTextInactive,
+                ]}
+              >
                 {chip.label}
               </Text>
             </View>
@@ -62,57 +96,83 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: Spacing.sm,
+    marginVertical: Spacing.lg,
   },
+
   labelRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.md,
   },
+
   label: {
     color: Colors.textMuted,
     fontSize: FontSize.xs,
+    fontWeight: '600',
   },
+
   subLabel: {
     color: Colors.textMuted,
     fontSize: FontSize.xs,
+    fontWeight: '500',
   },
+
   track: {
-    backgroundColor: Colors.progressBg,
+    backgroundColor: '#12121A',
     borderRadius: BorderRadius.round,
+    borderWidth: 1,
+    borderColor: '#2A2A3A',
     overflow: 'hidden',
   },
+
   fill: {
-    backgroundColor: Colors.accent,
     borderRadius: BorderRadius.round,
   },
+
+  tipGlow: {
+    position: 'absolute',
+    top: -3,
+    width: 12,
+    height: 16,
+    borderRadius: 4,
+    opacity: 0.7,
+  },
+
   chipsRow: {
     flexDirection: 'row',
-    marginTop: Spacing.md,
+    marginTop: Spacing.lg,
     flexWrap: 'wrap',
     gap: Spacing.sm,
   },
+
   chip: {
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.xs + 2,
+    paddingVertical: Spacing.sm,
     borderRadius: BorderRadius.round,
-    borderWidth: 1,
+    borderWidth: 1.5,
+    borderColor: Colors.cardBorder,
+    backgroundColor: Colors.cardBg,
   },
+
   chipActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
+    backgroundColor: '#F5B70030',
+    borderColor: '#F5B700',
   },
+
   chipInactive: {
-    backgroundColor: Colors.transparent,
+    backgroundColor: Colors.cardBg,
     borderColor: Colors.cardBorder,
   },
+
   chipText: {
     fontSize: FontSize.xs,
     fontWeight: '700',
   },
+
   chipTextActive: {
     color: Colors.black,
   },
+
   chipTextInactive: {
     color: Colors.textMuted,
   },

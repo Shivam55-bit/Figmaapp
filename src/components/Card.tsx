@@ -8,22 +8,25 @@ interface CardProps {
   style?: ViewStyle;
   noPadding?: boolean;
   gradient?: boolean;
+  glowColor?: string;
 }
 
-const Card: React.FC<CardProps> = ({ children, style, noPadding, gradient }) => {
+const Card: React.FC<CardProps> = ({ children, style, noPadding, gradient, glowColor }) => {
+  const glowStyle = glowColor ? { shadowColor: glowColor, shadowOpacity: 0.2, shadowRadius: 16, elevation: 8 } : {};
   if (gradient) {
     return (
       <LinearGradient
-        colors={['#2A2000', '#1A1A1A', '#1A1A1A']}
+        colors={['#1F1A0D', '#1A1620', '#12121A']}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
-        style={[styles.card, styles.gradientCard, noPadding && styles.noPadding, style]}>
+        style={[styles.card, styles.gradientCard, noPadding && styles.noPadding, glowStyle, style]}>
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, backgroundColor: '#F5B70020' }} />
         {children}
       </LinearGradient>
     );
   }
   return (
-    <View style={[styles.card, noPadding && styles.noPadding, style]}>
+    <View style={[styles.card, noPadding && styles.noPadding, glowStyle, style]}>
       {children}
     </View>
   );
@@ -32,24 +35,26 @@ const Card: React.FC<CardProps> = ({ children, style, noPadding, gradient }) => 
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.cardBg,
-    borderRadius: BorderRadius.lg,
+    borderRadius: BorderRadius.xl,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
-    elevation: 4,
+    elevation: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.45,
+    shadowRadius: 16,
+    overflow: 'hidden',
   },
   gradientCard: {
-    borderColor: '#3D3000',
-    elevation: 6,
+    borderColor: '#F5B70030',
+    borderWidth: 2,
+    elevation: 12,
     shadowColor: '#F5B700',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.35,
+    shadowRadius: 24,
   },
   noPadding: {
     padding: 0,

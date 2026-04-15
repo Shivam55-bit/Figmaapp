@@ -84,15 +84,23 @@ const MyInvestorsScreen = ({ navigation }: any) => {
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-          <Icon name="chevron-left" size={moderateScale(28)} color={Colors.accent} />
+          <LinearGradient colors={['#1E1E2E', '#12121A']} style={styles.backBtnBg}>
+            <Icon name="chevron-left" size={moderateScale(22)} color={Colors.accent} />
+          </LinearGradient>
         </TouchableOpacity>
         <Text style={styles.headerTitle}>My Investors</Text>
-        <View style={styles.headerRight} />
+        <TouchableOpacity style={styles.sortBtn}>
+          <LinearGradient colors={['#1E1E2E', '#12121A']} style={styles.backBtnBg}>
+            <Icon name="sort-variant" size={moderateScale(20)} color={Colors.textSecondary} />
+          </LinearGradient>
+        </TouchableOpacity>
       </View>
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <Icon name="magnify" size={moderateScale(20)} color={Colors.textMuted} style={styles.searchIcon} />
+        <View style={styles.searchIconBg}>
+          <Icon name="magnify" size={moderateScale(18)} color={Colors.accent} />
+        </View>
         <TextInput
           style={styles.searchInput}
           placeholder="Search investors..."
@@ -109,42 +117,44 @@ const MyInvestorsScreen = ({ navigation }: any) => {
 
       {/* Summary Stats */}
       <View style={styles.summaryRow}>
-        <View style={styles.summaryItem}>
-          <Icon name="account-group-outline" size={moderateScale(16)} color={Colors.textMuted} style={styles.summaryIcon} />
-          <Text style={styles.summaryValue}>{investorsData.length}</Text>
-          <Text style={styles.summaryLabel}>Total</Text>
-        </View>
-        <View style={[styles.summaryItem, styles.summaryItemActive]}>
-          <Icon name="check-circle-outline" size={moderateScale(16)} color={Colors.green} style={styles.summaryIcon} />
-          <Text style={[styles.summaryValue, { color: Colors.green }]}>{activeCount}</Text>
-          <Text style={styles.summaryLabel}>Active</Text>
-        </View>
-        <View style={styles.summaryItem}>
-          <Icon name="clock-outline" size={moderateScale(16)} color={Colors.accent} style={styles.summaryIcon} />
-          <Text style={[styles.summaryValue, { color: Colors.accent }]}>{dormantCount}</Text>
-          <Text style={styles.summaryLabel}>Dormant</Text>
-        </View>
+        {[
+          { icon: 'account-group-outline', value: investorsData.length, label: 'Total', color: Colors.textPrimary, bg: '#F5B70012' },
+          { icon: 'check-circle-outline', value: activeCount, label: 'Active', color: Colors.green, bg: '#00E67612' },
+          { icon: 'clock-outline', value: dormantCount, label: 'Dormant', color: Colors.accent, bg: '#F5B70012' },
+        ].map((stat, idx) => (
+          <LinearGradient key={idx} colors={['#1A1A28', '#12121A']} style={styles.summaryItem}>
+            <View style={[styles.summaryIconBg, { backgroundColor: stat.bg }]}>
+              <Icon name={stat.icon} size={moderateScale(14)} color={stat.color} />
+            </View>
+            <Text style={[styles.summaryValue, { color: stat.color }]}>{stat.value}</Text>
+            <Text style={styles.summaryLabel}>{stat.label}</Text>
+          </LinearGradient>
+        ))}
       </View>
 
       {/* Filter Chips */}
       <View style={styles.filtersRow}>
-        {filters.map(filter => (
-          <TouchableOpacity
-            key={filter.value}
-            style={[
-              styles.filterChip,
-              activeFilter === filter.value && styles.filterChipActive,
-            ]}
-            onPress={() => setActiveFilter(filter.value)}>
-            <Text
-              style={[
-                styles.filterChipText,
-                activeFilter === filter.value && styles.filterChipTextActive,
-              ]}>
-              {filter.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
+        {filters.map(filter => {
+          const isActive = activeFilter === filter.value;
+          return isActive ? (
+            <TouchableOpacity key={filter.value} onPress={() => setActiveFilter(filter.value)} activeOpacity={0.8}>
+              <LinearGradient
+                colors={['#F5B700', '#FFD54F']}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 0}}
+                style={styles.filterChipActive}>
+                <Text style={styles.filterChipTextActive}>{filter.label}</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              key={filter.value}
+              style={styles.filterChip}
+              onPress={() => setActiveFilter(filter.value)}>
+              <Text style={styles.filterChipText}>{filter.label}</Text>
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
       {/* Investor List */}
@@ -152,21 +162,28 @@ const MyInvestorsScreen = ({ navigation }: any) => {
         style={styles.listContainer}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}>
-        {filteredInvestors.map(investor => (
-          <TouchableOpacity
-            key={investor.id}
-            activeOpacity={0.7}
-            onPress={() => navigation.navigate('InvestorDetail', { investor })}>
-            <InvestorCard
-              name={investor.name}
-              joinedDate={investor.joinedDate}
-              status={investor.status}
-              invested={investor.invested}
-              current={investor.current}
-              returnPercent={investor.returnPercent}
-            />
-          </TouchableOpacity>
-        ))}
+        {filteredInvestors.length === 0 ? (
+          <View style={styles.emptyState}>
+            <Icon name="account-search-outline" size={moderateScale(48)} color={Colors.textMuted} />
+            <Text style={styles.emptyStateText}>No investors found</Text>
+          </View>
+        ) : (
+          filteredInvestors.map(investor => (
+            <TouchableOpacity
+              key={investor.id}
+              activeOpacity={0.7}
+              onPress={() => navigation.navigate('InvestorDetail', { investor })}>
+              <InvestorCard
+                name={investor.name}
+                joinedDate={investor.joinedDate}
+                status={investor.status}
+                invested={investor.invested}
+                current={investor.current}
+                returnPercent={investor.returnPercent}
+              />
+            </TouchableOpacity>
+          ))
+        )}
         <View style={styles.bottomSpacer} />
       </ScrollView>
 
@@ -196,38 +213,46 @@ const styles = StyleSheet.create({
     paddingHorizontal: Spacing.lg,
     paddingVertical: Spacing.md,
   },
-  backBtn: {
-    width: moderateScale(36),
-    height: moderateScale(36),
+  backBtn: {},
+  sortBtn: {},
+  backBtnBg: {
+    width: moderateScale(38),
+    height: moderateScale(38),
+    borderRadius: moderateScale(12),
     justifyContent: 'center',
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: Colors.cardBorder,
   },
   headerTitle: {
     color: Colors.textPrimary,
     fontSize: FontSize.xl,
     fontWeight: '700',
   },
-  headerRight: {
-    width: moderateScale(36),
-  },
   // Search
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: Colors.cardBg,
-    borderRadius: BorderRadius.round,
+    borderRadius: BorderRadius.xl,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
     marginHorizontal: Spacing.lg,
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
     marginBottom: Spacing.md,
-    elevation: 2,
+    elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
   },
-  searchIcon: {
+  searchIconBg: {
+    width: moderateScale(30),
+    height: moderateScale(30),
+    borderRadius: moderateScale(10),
+    backgroundColor: '#F5B70012',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: Spacing.sm,
   },
   searchInput: {
@@ -245,23 +270,24 @@ const styles = StyleSheet.create({
   },
   summaryItem: {
     flex: 1,
-    backgroundColor: Colors.cardBg,
-    borderRadius: BorderRadius.md,
+    borderRadius: BorderRadius.lg,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
     paddingVertical: Spacing.md,
     alignItems: 'center',
-    elevation: 3,
+    elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
   },
-  summaryIcon: {
+  summaryIconBg: {
+    width: moderateScale(28),
+    height: moderateScale(28),
+    borderRadius: moderateScale(9),
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 4,
-  },
-  summaryItemActive: {
-    borderColor: '#0D3B1E',
   },
   summaryValue: {
     color: Colors.textPrimary,
@@ -283,15 +309,21 @@ const styles = StyleSheet.create({
   },
   filterChip: {
     paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
+    paddingVertical: Spacing.sm + 2,
     borderRadius: BorderRadius.round,
     borderWidth: 1,
     borderColor: Colors.cardBorder,
     backgroundColor: Colors.transparent,
   },
   filterChipActive: {
-    backgroundColor: Colors.accent,
-    borderColor: Colors.accent,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm + 2,
+    borderRadius: BorderRadius.round,
+    elevation: 4,
+    shadowColor: '#F5B700',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
   },
   filterChipText: {
     color: Colors.textMuted,
@@ -300,6 +332,19 @@ const styles = StyleSheet.create({
   },
   filterChipTextActive: {
     color: Colors.black,
+    fontSize: FontSize.sm,
+    fontWeight: '700',
+  },
+  // Empty State
+  emptyState: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: Spacing.xxxl * 2,
+    gap: Spacing.md,
+  },
+  emptyStateText: {
+    color: Colors.textMuted,
+    fontSize: FontSize.md,
   },
   // List
   listContainer: {
@@ -312,21 +357,21 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: moderateScale(24),
     right: moderateScale(20),
-    elevation: 8,
+    elevation: 10,
     shadowColor: '#F5B700',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
   },
   fabGradient: {
     width: moderateScale(56),
     height: moderateScale(56),
-    borderRadius: moderateScale(28),
+    borderRadius: moderateScale(16),
     justifyContent: 'center',
     alignItems: 'center',
   },
   bottomSpacer: {
-    height: Spacing.lg,
+    height: Spacing.xxl,
   },
 });
 

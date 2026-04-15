@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Colors, FontSize, Spacing, moderateScale } from '../theme';
+import LinearGradient from 'react-native-linear-gradient';
+import { Colors, FontSize, Spacing, BorderRadius, moderateScale } from '../theme';
 
 interface SectionHeaderProps {
   title: string;
@@ -13,7 +14,12 @@ const SectionHeader: React.FC<SectionHeaderProps> = ({ title, rightText, onRight
   return (
     <View style={styles.container}>
       <View style={styles.left}>
-        <View style={styles.accentBar} />
+        <LinearGradient
+          colors={['#F5B700', '#FFD54F']}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={styles.accentBar}
+        />
         <Text style={styles.title}>{title}</Text>
       </View>
       {rightText && (
@@ -31,35 +37,42 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.md,
-    marginTop: Spacing.lg,
+    marginBottom: Spacing.lg,
+    marginTop: Spacing.xl,
+    paddingHorizontal: Spacing.xs,
   },
   left: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   accentBar: {
-    width: moderateScale(3),
-    height: moderateScale(14),
-    backgroundColor: Colors.accent,
+    width: moderateScale(4),
+    height: moderateScale(20),
     borderRadius: 2,
-    marginRight: Spacing.sm,
+    marginRight: Spacing.md,
   },
   title: {
-    color: Colors.textSecondary,
-    fontSize: FontSize.sm,
-    fontWeight: '700',
+    color: Colors.textPrimary,
+    fontSize: FontSize.md,
+    fontWeight: '800',
     textTransform: 'uppercase',
-    letterSpacing: 1.2,
+    letterSpacing: 1.8,
   },
   rightButton: {
     flexDirection: 'row',
     alignItems: 'center',
+    backgroundColor: '#F5B70015',
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: BorderRadius.round,
+    borderWidth: 1,
+    borderColor: '#F5B70025',
   },
   rightText: {
     color: Colors.accent,
     fontSize: FontSize.sm,
-    fontWeight: '600',
+    fontWeight: '700',
+    marginRight: Spacing.xs,
   },
 });
 

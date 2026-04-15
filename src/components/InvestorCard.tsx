@@ -28,18 +28,17 @@ const InvestorCard: React.FC<InvestorCardProps> = ({
   invested,
   current,
   returnPercent,
-  onPress,
 }) => {
   const getStatusStyle = () => {
     switch (status) {
       case 'Active':
-        return { bg: Colors.activeBadgeBg, text: Colors.activeBadgeText, icon: 'check-circle' };
+        return { bg: Colors.activeBadgeBg, text: Colors.activeBadgeText, icon: 'check-circle', glow: Colors.glowGreen };
       case 'Dormant':
-        return { bg: Colors.dormantBadgeBg, text: Colors.dormantBadgeText, icon: 'clock-outline' };
+        return { bg: Colors.dormantBadgeBg, text: Colors.dormantBadgeText, icon: 'clock-outline', glow: Colors.glowGold };
       case 'KYC Pending':
-        return { bg: Colors.kycPendingBg, text: Colors.kycPendingText, icon: 'alert-circle-outline' };
+        return { bg: Colors.kycPendingBg, text: Colors.kycPendingText, icon: 'alert-circle-outline', glow: Colors.glowGold };
       default:
-        return { bg: Colors.cardBorder, text: Colors.textMuted, icon: 'help-circle-outline' };
+        return { bg: Colors.cardBorder, text: Colors.textMuted, icon: 'help-circle-outline', glow: '#00000000' };
     }
   };
 
@@ -49,48 +48,73 @@ const InvestorCard: React.FC<InvestorCardProps> = ({
 
   return (
     <View style={styles.card}>
+      {/* Subtle top glow line */}
+      <LinearGradient
+        colors={['#F5B70040', '#F5B70000']}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.topGlow}
+      />
       <View style={styles.topRow}>
         <View style={styles.topLeft}>
-          <View style={styles.avatar}>
-            <Text style={styles.avatarText}>{getInitials(name)}</Text>
-          </View>
+          <LinearGradient
+            colors={['#F5B700', '#FFD54F', '#F5B700']}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={styles.avatarRing}>
+            <View style={styles.avatarInner}>
+              <Text style={styles.avatarText}>{getInitials(name)}</Text>
+            </View>
+          </LinearGradient>
           <View style={styles.nameContainer}>
             <Text style={styles.name}>{name}</Text>
-            <Text style={styles.joinedDate}>Joined {joinedDate}</Text>
+            <View style={styles.joinedRow}>
+              <Icon name="calendar-clock" size={moderateScale(11)} color={Colors.textMuted} />
+              <Text style={styles.joinedDate}>{joinedDate}</Text>
+            </View>
           </View>
         </View>
         <View style={[styles.badge, { backgroundColor: statusStyle.bg }]}>
-          <Icon name={statusStyle.icon} size={moderateScale(10)} color={statusStyle.text} />
+          <Icon name={statusStyle.icon} size={moderateScale(11)} color={statusStyle.text} />
           <Text style={[styles.badgeText, { color: statusStyle.text }]}>{status}</Text>
         </View>
       </View>
 
       <View style={styles.statsRow}>
         <View style={styles.statCol}>
-          <Text style={styles.statLabel}>Invested</Text>
+          <Text style={styles.statLabel}>INVESTED</Text>
           <Text style={styles.statValue}>${invested}</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statCol}>
-          <Text style={styles.statLabel}>Current</Text>
+          <Text style={styles.statLabel}>CURRENT</Text>
           <Text style={[styles.statValue, { color: Colors.green }]}>{current}</Text>
         </View>
         <View style={styles.statDivider} />
         <View style={styles.statCol}>
-          <Text style={styles.statLabel}>Return</Text>
-          <Text
-            style={[
-              styles.statValue,
-              {
-                color: isZero
-                  ? Colors.textMuted
-                  : isPositive
-                  ? Colors.green
-                  : Colors.red,
-              },
-            ]}>
-            {returnPercent}
-          </Text>
+          <Text style={styles.statLabel}>RETURN</Text>
+          <View style={styles.returnRow}>
+            {!isZero && (
+              <Icon
+                name={isPositive ? 'trending-up' : 'trending-down'}
+                size={moderateScale(13)}
+                color={isPositive ? Colors.green : Colors.red}
+              />
+            )}
+            <Text
+              style={[
+                styles.statValue,
+                {
+                  color: isZero
+                    ? Colors.textMuted
+                    : isPositive
+                    ? Colors.green
+                    : Colors.red,
+                },
+              ]}>
+              {returnPercent}
+            </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -100,16 +124,26 @@ const InvestorCard: React.FC<InvestorCardProps> = ({
 const styles = StyleSheet.create({
   card: {
     backgroundColor: Colors.cardBg,
-    borderRadius: BorderRadius.lg,
-    borderWidth: 1,
+    borderRadius: BorderRadius.xl,
+    borderWidth: 1.5,
     borderColor: Colors.cardBorder,
     padding: Spacing.lg,
     marginBottom: Spacing.md,
-    elevation: 4,
+    elevation: 8,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.25,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.42,
+    shadowRadius: 14,
+    overflow: 'hidden',
+  },
+  topGlow: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    height: 2,
+    borderTopLeftRadius: BorderRadius.xl,
+    borderTopRightRadius: BorderRadius.xl,
   },
   topRow: {
     flexDirection: 'row',
@@ -122,16 +156,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
   },
-  avatar: {
-    width: moderateScale(40),
-    height: moderateScale(40),
-    borderRadius: moderateScale(20),
-    backgroundColor: '#2A2000',
-    borderWidth: 1,
-    borderColor: Colors.accent,
+  avatarRing: {
+    width: moderateScale(44),
+    height: moderateScale(44),
+    borderRadius: moderateScale(22),
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: Spacing.md,
+  },
+  avatarInner: {
+    width: moderateScale(38),
+    height: moderateScale(38),
+    borderRadius: moderateScale(19),
+    backgroundColor: '#0E0E18',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   avatarText: {
     color: Colors.accent,
@@ -146,18 +185,28 @@ const styles = StyleSheet.create({
     fontSize: FontSize.md,
     fontWeight: '700',
   },
+  joinedRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 3,
+  },
   joinedDate: {
     color: Colors.textMuted,
     fontSize: FontSize.xs,
-    marginTop: 2,
   },
   badge: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.xs + 2,
     borderRadius: BorderRadius.round,
-    gap: 4,
+    gap: 5,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   badgeText: {
     fontSize: FontSize.xs,
@@ -166,9 +215,11 @@ const styles = StyleSheet.create({
   statsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#111111',
-    borderRadius: BorderRadius.md,
+    backgroundColor: '#0A0A14',
+    borderRadius: BorderRadius.lg,
     padding: Spacing.md,
+    borderWidth: 1,
+    borderColor: '#1A1A28',
   },
   statCol: {
     flex: 1,
@@ -181,13 +232,20 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     color: Colors.textMuted,
-    fontSize: FontSize.xs,
+    fontSize: FontSize.xs - 1,
+    fontWeight: '600',
+    letterSpacing: 0.5,
     marginBottom: 4,
   },
   statValue: {
     color: Colors.textPrimary,
     fontSize: FontSize.md,
     fontWeight: '700',
+  },
+  returnRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
   },
 });
 
